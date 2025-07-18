@@ -1,0 +1,44 @@
+.category-container {
+    width: 250px;
+    border-radius: 25px;
+    margin: 25px;
+    display: block;
+
+}
+
+.category-container-red {
+    border: solid 5px red;
+
+}
+
+.category-container-blue {
+    border: solid 5px blue;
+}
+
+.category-container-green {
+    border: solid 5px green;
+
+}
+
+.category-title {
+    display: table;
+    height: 40px;
+    width: 100%;
+    border-radius: 10px 10px 0px 0px;
+}
+
+.category-title-red {
+    background-color: red;
+}
+
+.category-title-blue {
+        background-color: blue;
+}
+
+.category-title-green {
+        background-color: green;
+}
+
+.category-pages {
+    padding: 10px;
+}

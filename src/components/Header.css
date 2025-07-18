@@ -1,0 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Anybody:ital,wght@0,100..900;1,100..900&family=Kode+Mono:wght@400..700&family=Lavishly+Yours&family=Ms+Madi&display=swap');
+
+.header-container {
+    height: 75px; 
+    text-align:center; 
+    width:100%;
+    background-color: red;
+    border-radius: 50px;
+    margin-top: 5px;
+}
+
+.header-title-background {
+    width: 300px;
+    display:table;
+    background-color: black;
+    height: 100%;
+    float: right;
+    margin-right: 10%;
+}
