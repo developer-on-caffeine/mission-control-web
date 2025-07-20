@@ -70,7 +70,6 @@ const CatForm = ({ categories, action }) => {
             if(action === 'add'){
                 response = await CategoryUtils.handleAddCategorySubmit(formData);
             } else if(action === 'edit'){
-                console.log(formData)
                 response = await CategoryUtils.handleEditCategorySubmit(formData);
             }
             if(response.ok){

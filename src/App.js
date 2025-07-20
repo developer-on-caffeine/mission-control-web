@@ -12,6 +12,9 @@ function App() {
   const [categories, setCategories] = useState(null)
   const [loading, setLoading] = useState(true);
   const location = useLocation();
+  const { pathname } = useLocation();
+  const isEditMode = pathname === '/edit';
+  const action = isEditMode ? 'edit' : '';
 
   useEffect(() => {
     const loadCategories = async () => {
@@ -34,15 +37,18 @@ function App() {
 
   return (
     <div className="App">
-        <Header/>
+        <Header action={action}/>
         <Routes>
           <Route path="/" element={<Dashboard categories={categories} action="view"/>} />
-          <Route path="/addcategory" element={<CatForm categories={categories} action="add"/>}/>
-          <Route path="/editcategory" element={<CatForm categories={categories} action="edit"/>}/>
+          <Route path="/edit" element={<Dashboard categories={categories} action="edit"/>} />
           <Route path="/addpage" element={<PageForm categories={categories} action="add"/>}/>
           <Route path="/editpage" element={<PageForm categories={categories} action="edit"/>}/>
+
+          {/* <Route path="/addcategory" element={<CatForm categories={categories} action="add"/>}/>
+          <Route path="/editcategory" element={<CatForm categories={categories} action="edit"/>}/>
+          <Route path="/editpage" element={<PageForm categories={categories} action="edit"/>}/>
           <Route path="/deletepage" element={<Dashboard categories={categories} action="deletepage"/>}/>
-          <Route path="/deletecategory" element={<Dashboard categories={categories} action="deletecategory"/>}/>
+          <Route path="/deletecategory" element={<Dashboard categories={categories} action="deletecategory"/>}/> */}
         </Routes>
     </div>
   );

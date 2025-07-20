@@ -12,32 +12,33 @@ class PageUtils {
         }
     }
 
-    static async handleAddPageSubmit(formData) {
+    static async handleAddPageSubmit(pageData) {
+        console.log(pageData)
         const response = await fetch('http://localhost:8080/addpage', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                name: formData.pageName,
-                category: formData.category,
-                url: formData.url,
-                target: formData.target
+                categoryId: pageData.categoryId,
+                name: pageData.name,
+                url: pageData.url,
+                target: pageData.target
             }),
         });
         return response;
     }
 
-    static async handleEditPageSubmit(formData){
-        const response = await fetch(`http://localhost:8080/pages/${formData.category}/${formData.page}`, {
+    static async handleEditPageSubmit(pageData){
+        const response = await fetch(`http://localhost:8080/pages/${pageData.categoryId}/${pageData.pageId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                name: formData.pageName,
-                url: formData.url,
-                target: formData.target
+                name: pageData.name,
+                url: pageData.url,
+                target: pageData.target
             }),
         });
     }

@@ -1,47 +1,33 @@
 import { useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import PageUtils from "../utils/PageUtils";
 
 const PageForm = ({categories, action}) => {
     const navigate = useNavigate();
-
-    const [formData, setFormData] = useState({
-        page: '',
-        pageName: '',
-        category: '',
-        url: '',
-        target: ''
+    const location = useLocation()
+    const categoryId = location.state.categoryId;
+    const pageId = location.state.pageId ? location.state.pageId : ''
+    
+    const [pageData, setPageData] = useState({
+        categoryId: categoryId,
+        pageId: pageId,
+        name: pageId !== '' ? categories[categoryId]['pages'][pageId].name : '',
+        url:pageId !== '' ? categories[categoryId]['pages'][pageId].url : '',
+        target: pageId !== '' ? categories[categoryId]['pages'][pageId].target : '',
     });
 
+    console.log(pageData)
     const targets = ['_self', '_blank']
 
     const handleChange = e => {
-        const {name, value} = e.target;
-        if(name === 'category'){
-            const cat = Object.entries(categories).find(([key, val]) => val.name.toLowerCase() == value.toLowerCase())
-            setFormData(prev => ({ ...prev, [name]: cat ? cat[0] : '' }))
-        } 
-        else {
-            setFormData(prev => ({ ...prev, [name]: value }));
-        }
-        if(name === 'page'){
-            const page = Object.entries(categories[formData.category].pages).find(([key, val]) => val.name.toLowerCase() == value.toLowerCase())
-            const pageId = page[0]
-            const pageValue = page[1]
-            setFormData(prev => ({
-                ...prev,
-                page: pageId,
-                pageName: pageValue.name,
-                url: pageValue.url,
-                target: pageValue.target
-            }))
-            document.getElementById('pageName').value = pageValue.name;
-            document.getElementById('url').value = pageValue.url;
-            document.getElementById('target').value = pageValue.target
-        }
+        const { name, value } = e.target;
+        setPageData(prev => ({
+            ...prev,
+            [name]: value
+        }));
     }
 
-        const [status, setStatus] = useState(null); // for feedback
+    const [status, setStatus] = useState(null); // for feedback
 
     const handleSubmit = async e => {
         e.preventDefault();
@@ -49,14 +35,15 @@ const PageForm = ({categories, action}) => {
         try {
             const response = null;
             if(action === 'add'){
-                response = await PageUtils.handleAddPageSubmit(formData);
+                console.log( 'add')
+                response = await PageUtils.handleAddPageSubmit(pageData);
             } else if (action === 'edit'){
-                response = await PageUtils.handleEditPageSubmit(formData) 
+                response = await PageUtils.handleEditPageSubmit(pageData) 
             }
             
             if(response.ok){
                 setStatus('Page added/edited successfully!');
-                setFormData({ pageName: '', category: '', categoryId: '', url: '', target: '' }); 
+                
             } else {
                 setStatus('Failed to add/edit page.');
             }
@@ -68,55 +55,14 @@ const PageForm = ({categories, action}) => {
     return (
         <form onSubmit={handleSubmit}>
             <div>
-                <label htmlFor="category">Category:</label>
-                <select
-                    id="category"
-                    name="category"
-                    onChange={handleChange}
-                    required
-                >   
-                    <option value="">
-                        -- Choose category --
-                    </option>
-                        {Object.entries(categories).map(([key, value]) => (
-                            <option key={key} value={value.name.toLowerCase()}>
-                                {value.name}
-                            </option>
-                        ))}
-                </select>         
-            </div>
-            <div>
-            
                 <div>
-                    {action === 'edit' && 
-            formData.category &&
-            categories[formData.category] &&
-            categories[formData.category].pages && (
-                    <div>
-                        <label htmlFor="page">Page:</label>
-                        <select
-                        id="page"
-                        name="page"
-                        onChange={handleChange}
-                        required
-                        >
-                        <option value="">
-                            -- Choose page --
-                        </option>
-                        {Object.entries(categories[formData.category].pages).map(([key, value]) => (
-                            <option key={key} value={value.name.toLowerCase()}>
-                            {value.name}
-                            </option>
-                        ))}
-                        </select>
-                    </div>
-                )}
                 <div>
                     <label htmlFor="pageName">Name:</label>
                     <input
                         type="text"
                         id="pageName"
-                        name="pageName"
+                        name="name"
+                        value={pageData.name}
                         onChange={handleChange}
                         required
                     />
@@ -128,6 +74,7 @@ const PageForm = ({categories, action}) => {
                         type="text"
                         id="url"
                         name="url"
+                        value={pageData.url}
                         onChange={handleChange}
                         required
                     />
@@ -137,6 +84,7 @@ const PageForm = ({categories, action}) => {
                     <select
                         id="target"
                         name="target"
+                        value={pageData.target}
                         onChange={handleChange}
                         required
                     >   
@@ -153,8 +101,8 @@ const PageForm = ({categories, action}) => {
             </div>
             </div>
             <div>
-                <button onClick={() => navigate('/', {state: {reload: true}})} type="submit">Save</button>
-                <button onClick={() => navigate('/')}>Cancel</button>
+                <button onClick={() => navigate('/edit', {state: {reload: true}})} type="submit">Save</button>
+                <button onClick={() => navigate('/edit')}>Cancel</button>
             </div>
         </form>
     )

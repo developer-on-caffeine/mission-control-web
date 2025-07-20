@@ -12,20 +12,24 @@ const Page = ({categoryId, category, pages, action}) => {
     return (
         <div className='page-container'>
             {Object.entries(pages).map(([key,value]) => (
-                category.name === "Settings" ?
-                (<p key={key}><Link to={value.url}>{value.name}</Link></p>)
-                :
-                <p key={key}>
+                <div key={key}>
                     <a href={value.url} target={value.target}>{value.name}</a>
-                    {action === 'deletepage' && (
+                    {action === 'edit' && (
+                        <div>
+                        <button onClick={() => {
+                            navigate('/editpage', {state: {reload: true, categoryId: categoryId, pageId: key}});
+                        }}>
+                            Edit
+                        </button>
                         <button onClick={() => {
                             handleDelete(key); 
-                            navigate('/deletepage', {state: {reload: true}});
+                            navigate('/edit', {state: {reload: true}});
                         }}>
                             Delete
                         </button>
+                        </div>
                     )}
-                </p>
+                </div>
           ))}
         </div>
     )

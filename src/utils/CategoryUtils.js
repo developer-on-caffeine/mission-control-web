@@ -33,23 +33,22 @@ class CategoryUtils {
       },
       body: JSON.stringify({
           name: formData.categoryName,
-          color: formData.color,
-          pages: formData.pages
+          color: formData.color
       }),
     });
     return response;
   }
 
-  static async handleEditCategorySubmit(formData){
-    console.log(formData)
-    const response = await fetch(`http://localhost:8080/categories/${formData.category}`, {
+  static async handleEditCategorySubmit(categoryData){
+    console.log(categoryData)
+    const response = await fetch(`http://localhost:8080/categories/${categoryData.id}`, {
       method: 'PUT',
       headers: {
           'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-          name: formData.categoryName,
-          color: formData.color
+          name: categoryData.name,
+          color: categoryData.color
       }),
     });
     return response;
